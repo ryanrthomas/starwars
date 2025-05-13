@@ -12,6 +12,23 @@ links.forEach(link => {
   });
   
 
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) {
+      dialog.close();
+    }
+  });
+  
+  //When the dialog closes, we reset it back to it's original state
+  dialog.addEventListener("close", () => {
+    characterTitle.innerText = "";
+    dialogContent.innerHTML = "Loading...";
+  })
+  
+  // Close the dialog when the close button is clicked within the dialog element
+  closeDialogButton.addEventListener('click', () => {
+    dialog.close();
+  });
+  
 
 const debounce = (func, wait) => {
     let timeout;
