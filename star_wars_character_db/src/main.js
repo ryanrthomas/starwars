@@ -2,33 +2,7 @@ const dialog = document.getElementById("popup-dialog");
 const characterTitle = document.getElementById("character-title");
 const dialogContent = document.getElementById("dialog-content");
 const closeDialogButton = document.getElementById("close-dialog");
-const links = document.querySelectorAll('.characters a');
 
-links.forEach(link => {
-    link.addEventListener('click', () => {
-      const characterUrl = link.getAttribute('data-url');
-      openCharacterDialog(characterUrl);
-    });
-  });
-  
-
-  dialog.addEventListener('click', (event) => {
-    if (event.target === dialog) {
-      dialog.close();
-    }
-  });
-  
-  //When the dialog closes, we reset it back to it's original state
-  dialog.addEventListener("close", () => {
-    characterTitle.innerText = "";
-    dialogContent.innerHTML = "Loading...";
-  })
-  
-  // Close the dialog when the close button is clicked within the dialog element
-  closeDialogButton.addEventListener('click', () => {
-    dialog.close();
-  });
-  
 
 const debounce = (func, wait) => {
     let timeout;
@@ -80,15 +54,22 @@ const displayCharacters = (characters) => {
         return `<li><a data-url="${character.url}">${character.name}</a></li>`
     }).join("");
     results.innerHTML = `<ul class="characters">${listOfCharacterNames}</ul>`;
+    const links = document.querySelectorAll('.characters a');
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+          const characterUrl = link.getAttribute('data-url');
+          openCharacterDialog(characterUrl);
+        });
+      });
 };
 
-const openCharacterDialog = () => {
+const openCharacterDialog = (characterApiUrl) => {
     dialog.showModal();
     fetch(characterApiUrl)
         .then(resp => resp.json())
         .then(data => {
             characterTitle.innerText = data.name;
-        dialogContent.innerHTML = `
+            dialogContent.innerHTML = `
             <p><strong>Height:</strong> ${data.height}</p>
             <p><strong>Mass:</strong> ${data.mass}</p>
             <p><strong>Gender:</strong> ${data.gender}</p>
